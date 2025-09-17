@@ -14,9 +14,6 @@ class App extends StatelessWidget {
     return StreamBuilder(
       stream: auth.authStateChanges(),
       builder: (context, snapshot) {
-        
-        //print(snapshot.data);
-        //snapshot.data?.reload();
         final User? currentUser = snapshot.data;
         return MaterialApp(
           key: Key((snapshot.data?.uid ?? 'no_user_id')),

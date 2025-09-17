@@ -28,14 +28,15 @@ dependencies:
 
 ### 4. Konfigurationsdaten aktualisieren
 
+⚠️ Es kann auch nötig den SHA Key hinzuzufügen: https://developers.google.com/android/guides/client-auth
+- Überprüfe außerdem, dass der Packagename der App mit dem von Firebase übereinstimmt
+
 ⚠️ Falls du den Google-Provider **neu** aktivierst, solltest du zur Sicherheit:
 - die `google-services.json` (Android)
 - und `GoogleService-Info.plist` (iOS)
 
 **neu herunterladen und ersetzen.**
 
-⚠️ Es kann auch nötig den SHA Key hinzuzufügen: https://developers.google.com/android/guides/client-auth
-- Überprüfe außerdem, dass der Packagename der App mit dem von Firebase übereinstimmt
 
 ---
 
