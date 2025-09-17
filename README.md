@@ -14,6 +14,30 @@ dependencies:
 ### 2. Google-Login-Code in `FirebaseAuthRepository` (siehe oben) ✅
 
 - `signInWithGoogle()` Methode
+
+```dart
+@override
+  Future<String?> signInWithGoogle() async {
+    try {
+      // Kann nötig sein wenn Authenticationflow nicht auftaucht, Müsst ihr mal ausprobieren
+      await GoogleSignIn.instance.initialize();
+      final GoogleSignInAccount googleUser = await GoogleSignIn.instance
+          .authenticate();
+
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+      final credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      await FirebaseAuth.instance.signInWithCredential(credential);
+    } on Exception catch (e) {
+      return "Google-Fehler: $e";
+    }
+    return null;
+  }
+```
+
 - `logout()` Methode ergänzt um `GoogleSignIn().signOut()`
 
 ---
