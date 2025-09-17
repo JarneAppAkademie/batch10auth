@@ -47,6 +47,8 @@ class _SignupScreenState extends State<SignupScreen> {
       _emailCtrl.text.trim(),
       _passCtrl.text,
     );
+
+    //MockdbUser
     }on FirebaseAuthException catch (e) {
       if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(

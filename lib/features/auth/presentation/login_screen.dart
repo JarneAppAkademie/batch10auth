@@ -31,7 +31,10 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!form.validate()) return;
 
     setState(() => _submitting = true);
-    await Future.delayed(const Duration(milliseconds: 600)); // fake call
+    await widget.auth.signInWithEmailAndPassword(
+      _emailCtrl.text.trim(),
+      _passCtrl.text,
+    );
     setState(() => _submitting = false);
 
     if (!mounted) return;
