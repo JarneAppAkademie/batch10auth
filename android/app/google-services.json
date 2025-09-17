@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "1082474782259",
+    "project_id": "batch10auth",
+    "storage_bucket": "batch10auth.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1082474782259:android:4a3af33ea9eaaed0168d46",
+        "android_client_info": {
+          "package_name": "com.example.batch10auth"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1082474782259-pj86eisfl1vg7vb2oa3e3hj12e72kq86.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.batch10auth",
+            "certificate_hash": "cdcb8ab8e00b395f9e59342a265e168833ca650d"
+          }
+        },
+        {
+          "client_id": "1082474782259-3cti86pfe1q8hndg0dobab4ascm7tirs.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmyd5flDIKvgpXy_L9mpbQFJJNJTTAwqI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1082474782259-3cti86pfe1q8hndg0dobab4ascm7tirs.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "1082474782259-3s529t608plq5fgjencu37dpjvs1pjra.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.batch10auth"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
