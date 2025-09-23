@@ -1,0 +1,97 @@
+import 'package:batch10auth/data/database_repository.dart';
+import 'package:batch10auth/features/restaurant/presentation/review_screen.dart';
+import 'package:flutter/material.dart';
+
+class RestaurantsPage extends StatefulWidget {
+  final DatabaseRepository db;
+  const RestaurantsPage({super.key, required this.db});
+  @override
+  State<RestaurantsPage> createState() => _RestaurantsPageState();
+}
+
+class _RestaurantsPageState extends State<RestaurantsPage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Restaurants')),
+      body: StreamBuilder(
+        stream: widget.db.watchRestaurants(),
+        builder: (context, snap) {
+          if (snap.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          final restaurant = snap.data ?? [];
+          if (restaurant.isEmpty)
+            return const Center(child: Text('Noch keine Restaurants'));
+          return ListView.separated(
+            itemCount: restaurant.length,
+            separatorBuilder: (_, __) => const Divider(height: 1),
+            itemBuilder: (context, i) {
+              final id = restaurant[i].id;
+              final name = restaurant[i].name;
+              return ListTile(
+                title: Text(name),
+                onTap: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => RestaurantDetailPage(
+                      restaurantId: id,
+                      restaurantName: name,
+                      db: widget.db,
+                    ),
+                  ),
+                ),
+              );
+            },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.add),
+        label: const Text('Restaurant'),
+        onPressed: () async {
+          final name = await _askForText(
+            context,
+            title: 'Neues Restaurant',
+            label: 'Name',
+          );
+          if (name == null || name.trim().isEmpty) return;
+          await widget.db.addRestaurant(name.trim());
+          if (!mounted) return;
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(const SnackBar(content: Text('Restaurant erstellt')));
+        },
+      ),
+    );
+  }
+}
+
+/// Kleiner Helfer für Text-Dialog
+Future<String?> _askForText(
+  BuildContext context, {
+  required String title,
+  required String label,
+}) async {
+  final ctrl = TextEditingController();
+  return showDialog<String>(
+    context: context,
+    builder: (_) => AlertDialog(
+      title: Text(title),
+      content: TextField(
+        controller: ctrl,
+        decoration: InputDecoration(labelText: label),
+        autofocus: true,
+      ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Abbrechen'),
+        ),
+        FilledButton(
+          onPressed: () => Navigator.pop(context, ctrl.text),
+          child: const Text('OK'),
+        ),
+      ],
+    ),
+  );
+}

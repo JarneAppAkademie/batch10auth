@@ -66,6 +66,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1082474782259',
     projectId: 'batch10auth',
     storageBucket: 'batch10auth.firebasestorage.app',
+    androidClientId: '1082474782259-pj86eisfl1vg7vb2oa3e3hj12e72kq86.apps.googleusercontent.com',
+    iosClientId: '1082474782259-3s529t608plq5fgjencu37dpjvs1pjra.apps.googleusercontent.com',
     iosBundleId: 'com.example.batch10auth',
   );
 
@@ -75,6 +77,9 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1082474782259',
     projectId: 'batch10auth',
     storageBucket: 'batch10auth.firebasestorage.app',
+    androidClientId: '1082474782259-pj86eisfl1vg7vb2oa3e3hj12e72kq86.apps.googleusercontent.com',
+    iosClientId: '1082474782259-3s529t608plq5fgjencu37dpjvs1pjra.apps.googleusercontent.com',
     iosBundleId: 'com.example.batch10auth',
   );
+
 }
