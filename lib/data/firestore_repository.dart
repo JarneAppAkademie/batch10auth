@@ -44,6 +44,11 @@ class FirestoreRepository implements DatabaseRepository {
     final doc = await _db.collection('restaurants').add({'name': name});
     return doc.id;
   }
+  // Oder statt Email Appuser benutzen
+  @override
+  Future<void> addUser(String userId,String email) async {
+    await _db.collection('Users').doc(userId).set({"email": email});
+  }
 
   /*
   @override

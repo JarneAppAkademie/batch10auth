@@ -22,7 +22,7 @@ class App extends StatelessWidget {
           key: Key((snapshot.data?.uid ?? 'no_user_id')),
           home: currentUser != null
               ? RestaurantsPage(db: db)
-              : SignupScreen(auth: auth),
+              : SignupScreen(auth: auth,db: db,),
         );
       },
     );

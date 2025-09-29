@@ -6,8 +6,9 @@ abstract class DatabaseRepository {
   Stream<List<Restaurant>> watchRestaurants();
   Future<void> addReview({
     required String restaurantId,
-    required int rating, // 1..5
+    required int rating,
     required String text,
   });
   Stream<List<Review>> watchReviews(String restaurantId);
+  Future<void> addUser(String userId, String email);
 }

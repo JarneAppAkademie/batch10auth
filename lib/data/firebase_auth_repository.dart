@@ -12,26 +12,23 @@ class FirebaseAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<void> createUserWithEmailAndPassword(
+  Future<String> createUserWithEmailAndPassword(
     String email,
     String password,
   ) async {
-    await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    final credentials = await FirebaseAuth.instance
+        .createUserWithEmailAndPassword(email: email, password: password);
+    return credentials.user!.uid;
   }
 
   @override
   Future<void> signOut() async {
     await GoogleSignIn.instance.signOut();
     await FirebaseAuth.instance.signOut();
-    
   }
 
   @override
   Stream<User?> authStateChanges() {
-    
     return FirebaseAuth.instance.authStateChanges();
   }
 

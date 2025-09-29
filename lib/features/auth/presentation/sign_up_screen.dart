@@ -1,13 +1,15 @@
 import 'package:batch10auth/common/validators.dart';
 import 'package:batch10auth/data/auth_repository.dart';
+import 'package:batch10auth/data/database_repository.dart';
 import 'package:batch10auth/features/auth/presentation/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
   final AuthRepository auth;
+  final DatabaseRepository db;
 
-  const SignupScreen({super.key, required this.auth});
+  const SignupScreen({super.key, required this.auth, required this.db});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -43,20 +45,19 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() => _submitting = true);
 
     try {
-      await widget.auth.createUserWithEmailAndPassword(
-      _emailCtrl.text.trim(),
-      _passCtrl.text,
-    );
+      String userId = await widget.auth.createUserWithEmailAndPassword(
+        _emailCtrl.text.trim(),
+        _passCtrl.text,
+      );
+      //Firestore Nutzer erstellen
+      await widget.db.addUser(userId, _emailCtrl.text.trim());
 
-    //MockdbUser
-    }on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (e) {
       if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Error: ${e.message}')),
-    );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Error: ${e.message}')));
     }
-
-    
 
     setState(() => _submitting = false);
 
@@ -142,7 +143,9 @@ class _SignupScreenState extends State<SignupScreen> {
                   TextButton(
                     onPressed: () => Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => LoginScreen(auth: widget.auth,)),
+                      MaterialPageRoute(
+                        builder: (context) => LoginScreen(auth: widget.auth,db: widget.db),
+                      ),
                     ),
                     child: const Text('Already have an account? Login'),
                   ),

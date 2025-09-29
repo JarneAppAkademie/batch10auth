@@ -11,7 +11,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
-  //final DatabaseRepository db = FirestoreRepository();
   final AuthRepository auth = FirebaseAuthRepository();
   final DatabaseRepository db = FirestoreRepository();
 

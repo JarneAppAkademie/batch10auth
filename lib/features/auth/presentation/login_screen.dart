@@ -1,12 +1,14 @@
 import 'package:batch10auth/common/validators.dart';
 import 'package:batch10auth/data/auth_repository.dart';
+import 'package:batch10auth/data/database_repository.dart';
 import 'package:batch10auth/features/auth/presentation/sign_up_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 class LoginScreen extends StatefulWidget {
+  final DatabaseRepository db;
   final AuthRepository auth;
-  const LoginScreen({super.key, required this.auth});
+  const LoginScreen({super.key, required this.auth, required this.db});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -120,7 +122,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SignupScreen(auth: widget.auth),
+                        builder: (context) =>
+                            SignupScreen(auth: widget.auth, db: widget.db),
                       ),
                     ),
                     child: const Text("Don't have an account? Sign up"),
