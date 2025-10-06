@@ -3,6 +3,8 @@ import 'package:batch10auth/data/auth_repository.dart';
 import 'package:batch10auth/data/database_repository.dart';
 import 'package:batch10auth/data/firebase_auth_repository.dart';
 import 'package:batch10auth/data/firestore_repository.dart';
+import 'package:batch10auth/data/restaurant_provider.dart';
+import 'package:batch10auth/data/review_provider.dart';
 import 'package:batch10auth/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +20,8 @@ void main() async {
   runApp(MultiProvider(providers: [
     Provider(create: (_)=> auth),
     Provider(create: (_)=> db),
+    ChangeNotifierProvider(create: (_)=> RestaurantProvider(db: db)),
+    ChangeNotifierProvider(create: (_)=> ReviewProvider(db: db))
 
   ],
   child: App(),));

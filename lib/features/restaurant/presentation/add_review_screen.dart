@@ -1,13 +1,11 @@
 import 'package:batch10auth/data/database_repository.dart';
+import 'package:batch10auth/data/review_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 /// Bottom-Sheet: Review hinzufügen (Rating 1–5 + Text)
 class AddReviewSheet extends StatefulWidget {
-  const AddReviewSheet({
-    super.key,
-    required this.restaurantId,
-  });
+  const AddReviewSheet({super.key, required this.restaurantId});
   final String restaurantId;
 
   @override
@@ -74,14 +72,14 @@ class _AddReviewSheetState extends State<AddReviewSheet> {
                     : () async {
                         try {
                           setState(() => _saving = true);
-                          await context.read<DatabaseRepository>().addReview(
-                            restaurantId: widget.restaurantId,
-                            rating: _rating.round(),
-                            text: _textCtrl.text.trim(),
+                          await context.read<ReviewProvider>().addReview(
+                            widget.restaurantId,
+                            _textCtrl.text.trim(),
+                            _rating.round(),
                           );
-                          if (mounted) Navigator.pop(context);
+                          if (context.mounted) Navigator.pop(context);
                         } catch (e) {
-                          if (!mounted) return;
+                          if (!context.mounted) return;
                           ScaffoldMessenger.of(
                             context,
                           ).showSnackBar(SnackBar(content: Text('Fehler: $e')));

@@ -44,9 +44,10 @@ class FirestoreRepository implements DatabaseRepository {
     final doc = await _db.collection('restaurants').add({'name': name});
     return doc.id;
   }
+
   // Oder statt Email Appuser benutzen
   @override
-  Future<void> addUser(String userId,String email) async {
+  Future<void> addUser(String userId, String email) async {
     await _db.collection('Users').doc(userId).set({"email": email});
   }
 
@@ -75,17 +76,27 @@ class FirestoreRepository implements DatabaseRepository {
       );
 
   @override
-  Future<void> addReview({
+  Future<String> addReview({
     required String restaurantId,
-    required int rating, // 1..5
+    required int rating, 
     required String text,
   }) async {
-    await _db
+    final reference = await _db
         .collection('restaurants')
         .doc(restaurantId)
         .collection('reviews')
         .add({'rating': rating, 'text': text});
+    return reference.id;
   }
 
-  //TODO User einfügen
+  Future<List<Review>> getReviews(String restaurantId) async {
+    final snapshot = await _db
+        .collection('restaurants')
+        .doc(restaurantId)
+        .collection('reviews')
+        .get();
+    return snapshot.docs
+        .map((doc) => Review.fromJson(doc.data(), doc.id))
+        .toList();
+  }
 }

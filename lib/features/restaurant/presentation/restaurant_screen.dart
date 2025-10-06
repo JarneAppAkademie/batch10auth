@@ -1,4 +1,7 @@
 import 'package:batch10auth/data/database_repository.dart';
+import 'package:batch10auth/data/restaurant_provider.dart';
+import 'package:batch10auth/data/review_provider.dart';
+import 'package:batch10auth/features/restaurant/domain/restaurant.dart';
 import 'package:batch10auth/features/restaurant/presentation/review_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,27 +14,34 @@ class RestaurantsPage extends StatefulWidget {
 
 class _RestaurantsPageState extends State<RestaurantsPage> {
   @override
+  void initState() {
+    super.initState();
+    context.read<RestaurantProvider>().loadRestaurants();
+  }
+
+  @override
   Widget build(BuildContext context) {
     DatabaseRepository db = context.read<DatabaseRepository>();
     return Scaffold(
       appBar: AppBar(title: const Text('Restaurants')),
-      body: StreamBuilder(
-        stream: db.watchRestaurants(),
-        builder: (context, snap) {
-          if (snap.connectionState == ConnectionState.waiting) {
+      body: Consumer<RestaurantProvider>(
+        builder: (context, data, child) {
+          if (data.isLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-          final restaurant = snap.data ?? [];
-          if (restaurant.isEmpty)
+          if (data.restaurants.isEmpty){
             return const Center(child: Text('Noch keine Restaurants'));
+          }
+
           return ListView.separated(
-            itemCount: restaurant.length,
+            itemCount: data.restaurants.length,
             separatorBuilder: (_, __) => const Divider(height: 1),
             itemBuilder: (context, i) {
-              final id = restaurant[i].id;
-              final name = restaurant[i].name;
+              final id = data.restaurants[i].id;
+              final name = data.restaurants[i].name;
               return ListTile(
                 title: Text(name),
+                trailing: Consumer<ReviewProvider>(builder: (context, reviewData, child) => Text("${reviewData.reviews[id]?.length ?? 0}")),
                 onTap: () => Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (_) => RestaurantDetailPage(
@@ -55,8 +65,11 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
             label: 'Name',
           );
           if (name == null || name.trim().isEmpty) return;
-          await db.addRestaurant(name.trim());
-          if (!mounted) return;
+          if(context.mounted){
+            context.read<RestaurantProvider>().addRestaurants(name);
+          }
+          
+          if (!context.mounted) return;
           ScaffoldMessenger.of(
             context,
           ).showSnackBar(const SnackBar(content: Text('Restaurant erstellt')));
