@@ -2,14 +2,13 @@ import 'package:batch10auth/data/database_repository.dart';
 import 'package:batch10auth/features/restaurant/presentation/add_review_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RestaurantDetailPage extends StatelessWidget {
-  final DatabaseRepository db;
   const RestaurantDetailPage({
     super.key,
     required this.restaurantId,
     required this.restaurantName,
-    required this.db,
   });
   final String restaurantId;
   final String restaurantName;
@@ -19,7 +18,7 @@ class RestaurantDetailPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Text(restaurantName)),
       body: StreamBuilder(
-        stream: db.watchReviews(restaurantId),
+        stream: context.read<DatabaseRepository>().watchReviews(restaurantId),
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -51,7 +50,7 @@ class RestaurantDetailPage extends StatelessWidget {
         onPressed: () => showModalBottomSheet(
           context: context,
           isScrollControlled: true,
-          builder: (_) => AddReviewSheet(restaurantId: restaurantId, db: db),
+          builder: (_) => AddReviewSheet(restaurantId: restaurantId),
         ),
       ),
     );

@@ -3,12 +3,12 @@ import 'package:batch10auth/data/auth_repository.dart';
 import 'package:batch10auth/data/database_repository.dart';
 import 'package:batch10auth/features/auth/presentation/sign_up_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:sign_in_button/sign_in_button.dart';
 
 class LoginScreen extends StatefulWidget {
-  final DatabaseRepository db;
-  final AuthRepository auth;
-  const LoginScreen({super.key, required this.auth, required this.db});
+
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -33,7 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (!form.validate()) return;
 
     setState(() => _submitting = true);
-    await widget.auth.signInWithEmailAndPassword(
+    await context.read<AuthRepository>().signInWithEmailAndPassword(
       _emailCtrl.text.trim(),
       _passCtrl.text,
     );
@@ -110,7 +110,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     text: "Sign up with Google",
                     onPressed: () async {
                       try {
-                        await widget.auth.signInWithGoogle();
+                        await context.read<AuthRepository>().signInWithGoogle();
                       } catch (e) {
                         print(e);
                       }
@@ -123,7 +123,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            SignupScreen(auth: widget.auth, db: widget.db),
+                            SignupScreen(),
                       ),
                     ),
                     child: const Text("Don't have an account? Sign up"),

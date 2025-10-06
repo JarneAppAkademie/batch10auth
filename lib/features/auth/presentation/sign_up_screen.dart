@@ -4,12 +4,11 @@ import 'package:batch10auth/data/database_repository.dart';
 import 'package:batch10auth/features/auth/presentation/login_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SignupScreen extends StatefulWidget {
-  final AuthRepository auth;
-  final DatabaseRepository db;
 
-  const SignupScreen({super.key, required this.auth, required this.db});
+  const SignupScreen({super.key});
 
   @override
   State<SignupScreen> createState() => _SignupScreenState();
@@ -45,12 +44,14 @@ class _SignupScreenState extends State<SignupScreen> {
     setState(() => _submitting = true);
 
     try {
-      String userId = await widget.auth.createUserWithEmailAndPassword(
+      String userId = await context.read<AuthRepository>().createUserWithEmailAndPassword(
         _emailCtrl.text.trim(),
         _passCtrl.text,
       );
       //Firestore Nutzer erstellen
-      await widget.db.addUser(userId, _emailCtrl.text.trim());
+      if(mounted){
+        await context.read<DatabaseRepository>().addUser(userId, _emailCtrl.text.trim());
+      }
 
     } on FirebaseAuthException catch (e) {
       if (!mounted) return;
@@ -144,7 +145,7 @@ class _SignupScreenState extends State<SignupScreen> {
                     onPressed: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => LoginScreen(auth: widget.auth,db: widget.db),
+                        builder: (context) => LoginScreen(),
                       ),
                     ),
                     child: const Text('Already have an account? Login'),

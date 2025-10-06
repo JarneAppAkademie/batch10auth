@@ -1,10 +1,10 @@
 import 'package:batch10auth/data/database_repository.dart';
 import 'package:batch10auth/features/restaurant/presentation/review_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RestaurantsPage extends StatefulWidget {
-  final DatabaseRepository db;
-  const RestaurantsPage({super.key, required this.db});
+  const RestaurantsPage({super.key});
   @override
   State<RestaurantsPage> createState() => _RestaurantsPageState();
 }
@@ -12,10 +12,11 @@ class RestaurantsPage extends StatefulWidget {
 class _RestaurantsPageState extends State<RestaurantsPage> {
   @override
   Widget build(BuildContext context) {
+    DatabaseRepository db = context.read<DatabaseRepository>();
     return Scaffold(
       appBar: AppBar(title: const Text('Restaurants')),
       body: StreamBuilder(
-        stream: widget.db.watchRestaurants(),
+        stream: db.watchRestaurants(),
         builder: (context, snap) {
           if (snap.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -36,7 +37,6 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
                     builder: (_) => RestaurantDetailPage(
                       restaurantId: id,
                       restaurantName: name,
-                      db: widget.db,
                     ),
                   ),
                 ),
@@ -55,7 +55,7 @@ class _RestaurantsPageState extends State<RestaurantsPage> {
             label: 'Name',
           );
           if (name == null || name.trim().isEmpty) return;
-          await widget.db.addRestaurant(name.trim());
+          await db.addRestaurant(name.trim());
           if (!mounted) return;
           ScaffoldMessenger.of(
             context,

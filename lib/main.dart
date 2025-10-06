@@ -6,6 +6,7 @@ import 'package:batch10auth/data/firestore_repository.dart';
 import 'package:batch10auth/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,5 +15,10 @@ void main() async {
   final AuthRepository auth = FirebaseAuthRepository();
   final DatabaseRepository db = FirestoreRepository();
 
-  runApp(App(auth, db: db));
+  runApp(MultiProvider(providers: [
+    Provider(create: (_)=> auth),
+    Provider(create: (_)=> db),
+
+  ],
+  child: App(),));
 }

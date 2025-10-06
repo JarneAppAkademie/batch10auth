@@ -1,15 +1,14 @@
 import 'package:batch10auth/data/database_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 /// Bottom-Sheet: Review hinzufügen (Rating 1–5 + Text)
 class AddReviewSheet extends StatefulWidget {
   const AddReviewSheet({
     super.key,
     required this.restaurantId,
-    required this.db,
   });
   final String restaurantId;
-  final DatabaseRepository db;
 
   @override
   State<AddReviewSheet> createState() => _AddReviewSheetState();
@@ -75,7 +74,7 @@ class _AddReviewSheetState extends State<AddReviewSheet> {
                     : () async {
                         try {
                           setState(() => _saving = true);
-                          await widget.db.addReview(
+                          await context.read<DatabaseRepository>().addReview(
                             restaurantId: widget.restaurantId,
                             rating: _rating.round(),
                             text: _textCtrl.text.trim(),
