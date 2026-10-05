@@ -111,6 +111,7 @@ In der defaultConfig die minSdk = 23 setzen
 ### 7. Funktion testen 🎉
 
 - App starten
+- With Greetings from Dirk
 - Auf "Mit Google anmelden" klicken
 - Authentifizierung prüfen
 
